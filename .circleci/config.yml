@@ -123,6 +123,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
+              --tags Code="Stack-Backend-${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -130,10 +131,11 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
+              --tags Code="Stack-Frontend-${CIRCLE_WORKFLOW_ID}"
       - run:
-          name: Save backend url
+          name: Save Backend url
           command: |
-            PUBLIC_DNS=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values=udapeople-backend-ec2-*' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
+            PUBLIC_DNS=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Code,Values="Stack-Backend-${CIRCLE_WORKFLOW_ID}"' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             echo $PUBLIC_DNS
       # - run:
       #     name: Add back-end ip to ansible inventory
