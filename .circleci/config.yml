@@ -142,6 +142,7 @@ jobs:
           command: |
             BACKEND_URL=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Code,Values="Stack-Backend-${CIRCLE_WORKFLOW_ID}"' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             echo $BACKEND_URL > .circleci/ansible/inventiry.txt
+            cat .circleci/ansible/inventiry.txt
       - persist_to_workspace:
           root: ~/
           paths:
