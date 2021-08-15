@@ -52,7 +52,7 @@ export abstract class BaseRepository<TId, TEntity extends IAggregateRoot<TId>> {
     await this.repository.remove(entityToDelete);
   }
 
-  async findById(id: TId | any): Promise<TEntity> {
+  async findById(id: TId): Promise<TEntity> {
     return this.repository.findOneOrFail(id);
   }
 
