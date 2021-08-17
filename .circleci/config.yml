@@ -122,25 +122,23 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}" \
-              --tags Code="Stack-Backend-${CIRCLE_WORKFLOW_ID}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}" \
-              --tags Code="Stack-Frontend-${CIRCLE_WORKFLOW_ID}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Save Backend url
           command: |
-            BACKEND_URL=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Code,Values="Stack-Backend-${CIRCLE_WORKFLOW_ID}"' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
+            BACKEND_URL=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values="Stack-Backend-${CIRCLE_WORKFLOW_ID}"' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             curl -H "Content-Type: text/plain" -H "token: 7fa6d083-1eb9-49f2-838f-ff3145ce3075" --request PUT --data "$BACKEND_URL" https://api.memstash.io/values/backend_url
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            BACKEND_URL=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Code,Values="Stack-Backend-${CIRCLE_WORKFLOW_ID}"' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
+            BACKEND_URL=$(aws ec2 describe-instances --region ${AWS_DEFAULT_REGION} --filters 'Name=tag:Name,Values="Stack-Backend-${CIRCLE_WORKFLOW_ID}"' --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             echo $BACKEND_URL >> .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
