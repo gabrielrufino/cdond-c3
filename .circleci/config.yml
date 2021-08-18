@@ -142,9 +142,9 @@ jobs:
             echo $BACKEND_URL >> .circleci/ansible/inventory.txt
             yum -y install tar gzip jq
       - persist_to_workspace:
-          root: ~/
+          root: ./
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory.txt
       - run:
           name: Rollback
           command: |
