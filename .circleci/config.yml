@@ -140,7 +140,7 @@ jobs:
           command: |
             BACKEND_URL=$(aws ec2 describe-instances --region "${AWS_DEFAULT_REGION}" --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID}" --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             echo $BACKEND_URL >> .circleci/ansible/inventory.txt
-            yum -y install tar
+            yum -y install tar gzip jq
       - persist_to_workspace:
           root: ~/
           paths:
