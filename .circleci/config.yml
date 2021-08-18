@@ -140,6 +140,7 @@ jobs:
           command: |
             BACKEND_URL=$(aws ec2 describe-instances --region "${AWS_DEFAULT_REGION}" --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID}" --query "Reservations[*].Instances[0].PublicDnsName" --output text)
             echo $BACKEND_URL >> .circleci/ansible/inventory.txt
+            yum -y install tar
       - persist_to_workspace:
           root: ~/
           paths:
@@ -156,18 +157,19 @@ jobs:
       - image: ansible/ansible
     steps:
       - checkout
-      # Add ssh keys with fingerprint
-      # attach workspace
-      - run:
-          name: Install dependencies
-          command: |
-            # Your code here
-            exit 1
+      - add_ssh_keys:
+          fingerprints: [ce:e6:6c:4a:2a:4b:10:07:17:15:15:4d:21:5d:6d:e5]
+      - attach_workspace:
+          at: ./
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       # Your code here
+      #       exit 1
       - run:
           name: Configure server
           command: |
-            # Your code here
-            exit 1
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure      
 
   #run-migrations:
