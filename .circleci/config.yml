@@ -199,12 +199,7 @@ jobs:
             cat result.txt
             RESULT=$(grep -Fc "has been executed successfully" result.txt)
             curl -H "Content-Type: text/plain" -H "token: 7fa6d083-1eb9-49f2-838f-ff3145ce3075" --request PUT --data ${RESULT} https://api.memstash.io/values/migration_result
-      # - run:
-      #     name: Send migration results to memstash
-      #     command: |
-      #       # Your code here
-      #       exit 1
-  #   # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure      
 
   #deploy-frontend:
   #  docker:
