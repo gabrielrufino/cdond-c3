@@ -1,10 +1,10 @@
-- name: "Copy Compiled Back-End Files to EC2"
+- name: "Copy files to EC2"
   become: true
   copy:
     src: /root/project/backend.tar
     dest: /home/ubuntu/
 
-- name: "un tar"
+- name: "Decompress files"
   become: true
   shell: |
     tar -xvf backend.tar
@@ -13,7 +13,7 @@
   become: true
   shell: |
     cd backend/
-    npm i
+    npm install
 
 - name: "build"
   become: true
@@ -25,4 +25,4 @@
   become: true
   shell: |
     cd backend/
-    pm2 start npm --name backend -- start
+    pm2 start dist/main.js
