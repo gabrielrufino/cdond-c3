@@ -223,22 +223,31 @@ jobs:
             aws s3 sync ./dist s3://"udapeople-${CIRCLE_WORKFLOW_ID}"
       # Here's where you will add some code to rollback on failure      
                     
-  #deploy-backend:
-  #  docker:
-  #    # Docker image here that supports Ansible
-  #  steps:
-  #    # Checkout code from git
-  #    # Add ssh keys with fingerprint
-  #    # attach workspace
-  #    - run:
-  #        name: Install dependencies
-  #        command: |
-  #          # your code here
-  #    - run:
-  #        name: Deploy backend
-  #        command: |
-  #          # your code here
-  #    # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: [ce:e6:6c:4a:2a:4b:10:07:17:15:15:4d:21:5d:6d:e5]
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add --update npm
+            apk add --update curl
+            pip3 --no-cache-dir install awscli
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm install
+            npm run build
+            tar -cf backend.tar ./backend
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+      # Here's where you will add some code to rollback on failure  
 
   #smoke-test:
   #  docker:
@@ -330,8 +339,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      #- deploy-backend:
-      #    requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       #- smoke-test:
       #    requires: [deploy-backend, deploy-frontend]
       #- cloudfront-update:
