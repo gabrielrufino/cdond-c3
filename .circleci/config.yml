@@ -245,6 +245,7 @@ jobs:
             cd backend
             npm install
             npm run build
+            cd ..
             tar -cf backend.tar ./backend
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
