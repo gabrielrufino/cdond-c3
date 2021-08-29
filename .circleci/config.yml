@@ -256,14 +256,13 @@ jobs:
       - destroy-environment
   smoke-test:
     docker:
-      - image: alpine:3.14.2
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            apk add curl
-            pip3 --no-cache-dir install awscli
+            yum install -y curl
       - run:
           name: Backend smoke test.
           command: |
