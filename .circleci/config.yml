@@ -274,6 +274,8 @@ jobs:
             FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-east-1.amazonaws.com"
             if curl -s ${FRONTEND_URL} | grep "Welcome"
               then
+                exit 0
+              else
                 exit 1
             fi
       - revert-migrations
