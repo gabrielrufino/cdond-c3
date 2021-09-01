@@ -121,6 +121,7 @@ jobs:
       - run:
           name: Ensure front-end infrastructure exist
           command: |
+            echo ${CIRCLE_WORKFLOW_ID}
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}" \
@@ -140,12 +141,6 @@ jobs:
           root: ./
           paths:
             - .circleci/ansible/inventory.txt
-      - run:
-          name: Rollback
-          command: |
-            aws cloudformation delete-stack  --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}"
-            aws cloudformation delete-stack  --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}"
-          when: on_fail
       - destroy-environment
 
   configure-infrastructure:
@@ -296,6 +291,7 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
+            echo ${CIRCLE_WORKFLOW_ID}
             aws cloudformation deploy \
               --template .circleci/files/cloudfront.yml \
               --stack-name udapeople-cloudfront \
