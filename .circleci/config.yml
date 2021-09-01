@@ -345,7 +345,7 @@ workflows:
       - deploy-infrastructure:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - test-frontend
             - test-backend
@@ -354,43 +354,43 @@ workflows:
       - configure-infrastructure:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - deploy-infrastructure
       - run-migrations:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - configure-infrastructure
       - deploy-frontend:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - run-migrations
       - deploy-backend:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - run-migrations
       - smoke-test:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - deploy-backend
             - deploy-frontend
       - cloudfront-update:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - smoke-test
       - cleanup:
           filters:
             branches:
-              only: master
+              only: main
           requires:
             - cloudfront-update
