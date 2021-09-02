@@ -308,9 +308,9 @@ jobs:
           name: Get old stack workflow id and Remove old stacks and files
           command: |
             export OldWorkflowID=$(aws cloudformation \
-                list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --region "${AWS_DEFAULT_REGION}" \
                 --no-paginate --output text)
-            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].WorkflowID" --region "${AWS_DEFAULT_REGION}" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
@@ -384,9 +384,9 @@ workflows:
               only: main
           requires:
             - smoke-test
-      # - cleanup:
-      #     filters:
-      #       branches:
-      #         only: main
-      #     requires:
-      #       - cloudfront-update
+      - cleanup:
+          filters:
+            branches:
+              only: main
+          requires:
+            - cloudfront-update
