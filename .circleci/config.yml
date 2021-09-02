@@ -384,9 +384,9 @@ workflows:
               only: main
           requires:
             - smoke-test
-      - cleanup:
-          filters:
-            branches:
-              only: main
-          requires:
-            - cloudfront-update
+      # - cleanup:
+      #     filters:
+      #       branches:
+      #         only: main
+      #     requires:
+      #       - cloudfront-update
