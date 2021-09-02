@@ -13,3 +13,7 @@ https://d3uhpn934sxfq3.cloudfront.net
 ### Backend
 
 http://ec2-52-90-21-249.compute-1.amazonaws.com:3030
+
+### Prometheus
+
+http://ec2-3-83-157-202.compute-1.amazonaws.com:9090/targets
